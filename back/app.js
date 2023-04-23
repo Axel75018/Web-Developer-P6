@@ -26,14 +26,16 @@ app.use((req, res, next) => {
   next();
 });
 
-
-// je commence par le squelette du get route:/api/auces mais avec les bonnes routes
+//----------------------------------------------------Sauces
+// je commence par le squelette du get route:/api/sauces mais avec les bonnes routes
 app.get('/api/sauces', (req, res, next) => {
   Sauce.find()
   .then(sauces => res.status(200).json(sauces))
   .catch(error => res.status(400).json({error}))
 });
 
+
+//---------------------------------------signup-------------------------
 // ici je rajoute la route du sign up api/auth/signup
 // il me manque le hash pour l'instant
 app.post('/api/auth/signup', (req, res, next) => {
@@ -49,13 +51,31 @@ app.post('/api/auth/signup', (req, res, next) => {
       res.status(400).json({error});
     });
 });
+//------------------------------------------login------------------------------
 // ici je rajoute la route du login api/auth/login
 // il me manque le token pour l'instant
 app.post('/api/auth/login', (req, res, next) => {
-  console.log(req.body);
-  res.status(201).json({
-    message: 'Objet créé !'
-  });
+  // Recherche de l'utilisateur avec l'email
+  SauceL.findOne({ email: req.body.email })
+    .then(user => {
+      // Si l'utilisateur n'existe pas, envoie un message d'erreur
+      if (!user) {
+        return res.status(401).json({ error: 'Utilisateur non trouvé !' });
+      }
+
+      // Compare le mot de passe envoyé avec le mot de passe stocké dans la base de données
+      // mots de passe en texte brut, mais il faudra utiliser bcrypt 
+      if (req.body.password !== user.password) {
+        return res.status(401).json({ error: 'Mot de passe incorrect !' });
+      }
+
+      //  message de succès
+      res.status(200).json({ message: 'Succès !' });
+    })
+    .catch(error => {
+      res.status(500).json({ error });
+    });
 });
+
 
 module.exports = app;
