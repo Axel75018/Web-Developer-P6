@@ -1,8 +1,5 @@
-// Importation du package mongoose pour MongoDB
 const mongoose = require('mongoose');
 
-// Importation du package bcrypt pour le hachage des mots de passe
-const bcrypt = require('bcrypt');
 
 // Création d'un schéma pour les utilisateurs, appelé sauceLSchema
 const sauceLSchema = mongoose.Schema({
