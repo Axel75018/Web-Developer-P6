@@ -5,6 +5,8 @@ const SauceL = require('./schema/sauceL');
 const { error } = require('console');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
+const crypto = require('crypto');
+const secret = crypto.randomBytes(32).toString('hex');
 
 const app = express();
 
@@ -72,7 +74,6 @@ app.post('/api/auth/signup', (req, res, next) => {
     .catch((error) => res.status(500).json({ error }));
 });
 //------------------------------------------login------------------------------
-// ici je rajoute la route du login api/auth/login
 // 
 app.post('/api/auth/login', (req, res, next) => {
   SauceL.findOne({ email: req.body.email })
@@ -87,7 +88,7 @@ app.post('/api/auth/login', (req, res, next) => {
           }
           const token = jwt.sign(
             { userId: user._id },
-            'RANDOM_SECRET_KEY', // Vous devriez utiliser une clé secrète plus sécurisée pour la production
+            secret, //clé secrète aléatoire
             { expiresIn: '24h' } // Le token expirera après 24 heures
           );
           res.status(200).json({
