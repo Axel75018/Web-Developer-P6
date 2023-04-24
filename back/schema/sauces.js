@@ -1,7 +1,7 @@
 // Importation du package mongoose pour MongoDB
 const mongoose = require('mongoose');
 
-// Création d'un schéma pour les sauces, appelé saucesSchema
+
 const saucesSchema = mongoose.Schema({
   // Le champ name est une chaîne de caractères et obligatoire
   name: { type: String, required: true },
